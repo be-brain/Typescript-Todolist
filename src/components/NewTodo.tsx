@@ -1,7 +1,8 @@
-import { useRef } from "react";
-import classes from "./NewTodo.module.css";
+import { useRef, useContext } from "react";
+import { TodosContext } from "../store/todos-context";
 
-const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
+const NewTodo = () => {
+  const todosCtx = useContext(TodosContext);
   const todoInputRef = useRef<HTMLInputElement>(null);
   // useRef가 무엇과 연결되는지 알려줘야 한다 → HTMLInputElement
   // 초기값은 없으므로 null로 지정
@@ -20,20 +21,13 @@ const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
     if (enteredText.trim().length === 0) {
       return;
     }
-    props.onAddTodo(enteredText);
+    todosCtx.addTodo(enteredText);
   };
   return (
-    <form onClick={handleSubmit} className={classes.form}>
-      <label htmlFor="text" className={classes.label}>
-        Todo Text
-      </label>
-      <input
-        type="text"
-        id="text"
-        ref={todoInputRef}
-        className={classes.input}
-      />
-      <button className={classes.button}>Add Todo</button>
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="text">Todo Text</label>
+      <input type="text" id="text" ref={todoInputRef} />
+      <button type="submit">Add Todo</button>
     </form>
   );
 };
